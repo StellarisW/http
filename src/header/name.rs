@@ -6,6 +6,7 @@ use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 use std::hash::{Hash, Hasher};
+use std::marker::StructuralPartialEq;
 use std::mem::MaybeUninit;
 use std::ops::Deref;
 use std::str::FromStr;
@@ -53,6 +54,8 @@ enum Repr<T> {
     Standard(StandardHeader, Option<ByteStr>),
     Custom(T, Option<ByteStr>),
 }
+
+impl<T: StructuralPartialEq> StructuralPartialEq for Repr<T> {}
 
 impl<T: PartialEq> PartialEq for Repr<T> {
     fn eq(&self, other: &Self) -> bool {

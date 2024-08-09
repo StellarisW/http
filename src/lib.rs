@@ -157,6 +157,7 @@
 //! ```
 
 #![deny(warnings, missing_docs, missing_debug_implementations)]
+#![feature(structural_match)]
 
 //#![cfg_attr(not(feature = "std"), no_std)]
 #[cfg(not(feature = "std"))]
