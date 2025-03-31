@@ -649,6 +649,7 @@ fn ensure_miri_sharedreadonly_not_violated() {
     let _foo = &headers.iter().next();
 }
 
+#[cfg(feature = "double-write")]
 #[test]
 fn feature_double_write() {
     let mut headers = HeaderMap::new();
