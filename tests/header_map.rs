@@ -680,4 +680,7 @@ fn feature_double_write() {
     assert_eq!(headers.get(HeaderName::from_bytes("Foo".as_bytes()).unwrap()), Some(&HeaderValue::from_static("Bar")));
     assert_eq!(headers.get("foo1"), Some(&HeaderValue::from_static("baz1")));
     assert_eq!(headers.get_all("Foo1").into_iter().collect::<Vec<_>>(), vec![&HeaderValue::from_static("baz2"), &HeaderValue::from_static("baz3")]);
+    headers.remove("Foo1");
+    assert_eq!(headers.get("foo1"), Some(&HeaderValue::from_static("baz1")));
+    assert_eq!(headers.get("Foo1"), None);
 }
