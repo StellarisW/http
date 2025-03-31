@@ -69,6 +69,7 @@ impl<T: PartialEq> PartialEq for Repr<T> {
 
 impl<T: Eq> Eq for Repr<T> {}
 
+#[cfg(not(feature = "double-write"))]
 impl<T: Hash> Hash for Repr<T> {
     fn hash<H: Hasher>(&self, state: &mut H) {
         match self {
@@ -77,6 +78,30 @@ impl<T: Hash> Hash for Repr<T> {
         }
     }
 }
+#[cfg(feature = "double-write")]
+impl<T: Hash> Hash for Repr<T> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        match self {
+            Repr::Standard(inner, src) => {
+                match src {
+                    Some(src) => src.hash(state),
+                    None => {
+                        inner.hash(state);
+                    }
+                }
+            }
+            Repr::Custom(inner, src) => {
+                match src {
+                    Some(src) => src.hash(state),
+                    None => {
+                        inner.hash(state);
+                    }
+                }
+            },
+        }
+    }
+}
+
 
 // Used to hijack the Hash impl
 #[derive(Debug, Clone, Eq, PartialEq)]

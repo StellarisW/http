@@ -1,6 +1,7 @@
 use bytes::Bytes;
 
 use std::{ops, str};
+use std::hash::Hash;
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub(crate) struct ByteStr {

@@ -35,6 +35,7 @@ exclude = [
 [features]
 default = ["std"]
 std = []
+double-write = ["default"]
 
 [dependencies]
 bytes = "1"
