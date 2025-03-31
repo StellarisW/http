@@ -45,6 +45,11 @@ pub struct HdrName<'a> {
 
 impl<'a> Hash for HdrName<'a> {
     fn hash<H: Hasher>(&self, state: &mut H) {
+        #[cfg(feature = "double-write")]
+        if let Some(original)= self.original{
+            original.hash(state);
+            return;
+        }
         self.inner.hash(state);
     }
 }

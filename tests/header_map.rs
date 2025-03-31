@@ -1,3 +1,4 @@
+use std::str::FromStr;
 use http::header::*;
 use http::*;
 
@@ -647,4 +648,37 @@ fn ensure_miri_sharedreadonly_not_violated() {
     );
 
     let _foo = &headers.iter().next();
+}
+
+#[test]
+fn feature_double_write() {
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        HeaderName::from_static("foo"),
+        HeaderValue::from_static("bar"),
+    );
+
+    headers.insert(
+        HeaderName::from_str("Foo").unwrap(),
+        HeaderValue::from_static("Bar"),
+    );
+
+    headers.append(
+        HeaderName::from_str("foo1").unwrap(),
+        HeaderValue::from_static("baz1"),
+    );
+    headers.append(
+        HeaderName::from_str("Foo1").unwrap(),
+        HeaderValue::from_static("baz2"),
+    );
+    headers.append(
+        HeaderName::from_str("Foo1").unwrap(),
+        HeaderValue::from_static("baz3"),
+    );
+
+    assert_eq!(headers.get("foo"), Some(&HeaderValue::from_static("bar")));
+    assert_eq!(headers.get("Foo"), Some(&HeaderValue::from_static("Bar")));
+    assert_eq!(headers.get(HeaderName::from_bytes("Foo".as_bytes()).unwrap()), Some(&HeaderValue::from_static("Bar")));
+    assert_eq!(headers.get("foo1"), Some(&HeaderValue::from_static("baz1")));
+    assert_eq!(headers.get_all("Foo1").into_iter().collect::<Vec<_>>(), vec![&HeaderValue::from_static("baz2"), &HeaderValue::from_static("baz3")]);
 }
