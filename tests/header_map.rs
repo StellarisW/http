@@ -1,4 +1,3 @@
-use std::str::FromStr;
 use http::header::*;
 use http::*;
 
@@ -659,20 +658,20 @@ fn feature_double_write() {
     );
 
     headers.insert(
-        HeaderName::from_str("Foo").unwrap(),
+        HeaderName::from_bytes("Foo".as_bytes()).unwrap(),
         HeaderValue::from_static("Bar"),
     );
 
     headers.append(
-        HeaderName::from_str("foo1").unwrap(),
+        HeaderName::from_bytes("foo1".as_bytes()).unwrap(),
         HeaderValue::from_static("baz1"),
     );
     headers.append(
-        HeaderName::from_str("Foo1").unwrap(),
+        HeaderName::from_bytes("Foo1".as_bytes()).unwrap(),
         HeaderValue::from_static("baz2"),
     );
     headers.append(
-        HeaderName::from_str("Foo1").unwrap(),
+        HeaderName::from_bytes("Foo1".as_bytes()).unwrap(),
         HeaderValue::from_static("baz3"),
     );
 
